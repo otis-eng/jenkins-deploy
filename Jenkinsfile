@@ -1,26 +1,24 @@
 pipeline {
-  agents: any
+  agents any
 
   tools {nodejs "node"}
 
   stages {
-
-    stage("Checkout Soure"){
+    stage("Checkout Soure") {
       steps {
         git "https://github.com/patrick-blip/jenkins-deploy.git"
       }
     }
-  }
 
-  stage("Build"){
-    steps {
-      sh:'npm install'
+    stage("Build"){
+      steps {
+        sh:'npm install'
+      }
     }
-  }
 
-  stage("Test"){
-    steps {
-      sh 'node test'
+    stage("Test"){
+      steps {
+        sh 'node test'
+      }
     }
-  }
 }
