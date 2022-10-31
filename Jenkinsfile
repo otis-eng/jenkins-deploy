@@ -1,43 +1,19 @@
 pipeline {
-
-  environment {
-    dockerimagename  = ""
-    dockerImage = ""
-  }
-
-  agent any
-
   stages {
     stage("Checkout Soure"){
       steps {
-        git: ""
+        git: "https://github.com/patrick-blip/jenkins-deploy.git"
       }
     }
   }
-  stage("Build image"){
-    steps{
-      script{
-        dockerimagename = docker.build dockerimagename
-      }
-    }
-  }
-  stage("Pushing Image"){
-    environment {
-      registryCredential = 'dockerhublogin'
-    }
+  stage("Build"){
     steps {
-      script{
-        docker.withRegistry('',registryCredential)
-        dockerImage.push("latset")
-      }
+      sh: 'npm install'
     }
   }
-
-  stage("Deploy App to Kunbernets"){
+  stage("Test"){
     steps {
-      script {
-        kubernetesDelou(configs: "deloyservice.yml",kubeconfigId:"")
-      }
+      sh: 'node test'
     }
   }
 }
