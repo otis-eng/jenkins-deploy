@@ -1,22 +1,17 @@
 pipeline {
   agent any
-
+  tools {nodejs "16.14.2"}
   stages {
-    stage("Checkout Soure") {
+    stage('build') {
       steps {
-        git "https://github.com/patrick-blip/jenkins-deploy.git"
-      }
-    }
-
-    stage("Build"){
-      steps {
+        sh 'npm --version'
+        sh 'git log --reverse -1'
         sh 'npm install'
       }
     }
-
-    stage("Test"){
+    stage('test') {
       steps {
-        sh 'node test'
+        sh 'npm test'
       }
     }
   }
