@@ -9,4 +9,23 @@ pipeline {
       }
     }
   }
+   stage('Pushing to ECR') {
+     steps{  
+         script {
+			docker.withRegistry("https://" + REPOSITORY_URI, "ecr:${AWS_DEFAULT_REGION}:" + registryCredential) {
+                    	dockerImage.push()
+                	}
+         }
+        }
+      }
+      
+    stage('Deploy') {
+     steps{
+            withAWS(credentials: registryCredential, region: "${AWS_DEFAULT_REGION}") {
+                script {
+			sh './script.sh'
+                }
+            } 
+       }
+    }
 }
