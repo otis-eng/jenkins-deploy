@@ -1,31 +1,49 @@
 pipeline {
+
+  environment {
+    dockerimagename = "azmasssage/gateway"
+    dockerImage = ""
+  }
+
   agent any
+
   stages {
-    stage('build') {
+
+    stage('Checkout Source') {
       steps {
-        sh 'npm --version'
-        sh 'git log --reverse -1'
-        sh 'npm install'
+        git 'https://github.com/shazforiot/nodeapp_test.git'
       }
     }
-  }
-   stage('Pushing to ECR') {
-     steps{  
-         script {
-			docker.withRegistry("https://" + REPOSITORY_URI, "ecr:${AWS_DEFAULT_REGION}:" + registryCredential) {
-                    	dockerImage.push()
-                	}
-         }
+
+    stage('Build image') {
+      steps{
+        script {
+          dockerImage = docker.build dockerimagename
         }
       }
-      
-    stage('Deploy') {
-     steps{
-            withAWS(credentials: registryCredential, region: "${AWS_DEFAULT_REGION}") {
-                script {
-			sh './script.sh'
-                }
-            } 
-       }
     }
+
+    stage('Pushing Image') {
+      environment {
+               registryCredential = 'dockerhublogin'
+           }
+      steps{
+        script {
+          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+            dockerImage.push("latest")
+          }
+        }
+      }
+    }
+
+    stage('Deploying App to Kubernetes') {
+      steps {
+        script {
+          kubernetesDeploy(configs: "deploymentservice.yml", kubeconfigId: "kubernetes")
+        }
+      }
+    }
+
+  }
+
 }
