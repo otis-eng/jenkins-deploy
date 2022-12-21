@@ -20,7 +20,7 @@ spec:
         image: azmassage/hello:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 5000
+        - containerPort: 8000
           name: hello
 
 ---
