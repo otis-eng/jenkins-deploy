@@ -33,6 +33,7 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
+      nodePort: 8080
   selector:
     app: hello
     tier: hello
