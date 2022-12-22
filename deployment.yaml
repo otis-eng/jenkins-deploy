@@ -33,8 +33,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-  loadBalancerSourceRanges:
-    - 34.170.30.56
   selector:
     app: hello
     tier: hello
