@@ -20,7 +20,7 @@ spec:
         image: azmassage/hello:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 3000
+        - containerPort: 80
           name: hello
 
 ---
@@ -31,10 +31,9 @@ metadata:
 spec:
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
-      nodePort: 30080
+      port: 80
+      targetPort: 80
   selector:
     app: hello
     tier: hello
-  type: NodePort
+  type: LoadBalancer
