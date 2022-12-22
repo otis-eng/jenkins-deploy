@@ -29,6 +29,10 @@ kind: Service
 metadata:
   name: hello
 spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
   selector:
     app: hello
     tier: hello
