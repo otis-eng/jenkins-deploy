@@ -39,3 +39,5 @@ spec:
     app: hello
     tier: hello
   type: LoadBalancer
+  loadBalancerSourceRanges:
+    - 10.0.0.0/8
